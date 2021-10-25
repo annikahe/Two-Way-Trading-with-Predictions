@@ -48,7 +48,7 @@ class History():
         return self.alg.payoff
 
     def get_comp_ratio(self):
-        return self.alg.payoff / self.opt_off.payoff
+        return self.opt_off.payoff / self.alg.payoff
 
     def get_normalized_error(self):
         return self.get_total_error() / self.opt_off.payoff
