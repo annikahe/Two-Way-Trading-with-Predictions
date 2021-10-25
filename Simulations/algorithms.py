@@ -180,3 +180,55 @@ class FtPTrade(AlgorithmPred):
             self.x = self.prediction
         else:
             self.x = -self.prediction
+
+
+class CombineRandStart(Algorithm):
+    def __init__(self, alg0, alg1, l):
+        super().__init__()
+        self.l = l
+        self.index = np.random.Generator.choice([0, 1], p=[l, 1-l])
+        if self.index == 0:
+            self.followed_alg = alg0
+            self.other_alg = alg1
+        else:
+            self.followed_alg = alg1
+            self.other_alg = alg0
+
+    def trade(self, exchange_rate):
+        self.followed_alg.trade(exchange_rate)
+        self.other_alg.trade(exchange_rate)
+        self.x = self.followed_alg.x
+
+
+class CombineRandStep(Algorithm):
+    def __init__(self, alg0, alg1, l):
+        super().__init__()
+        self.l = l
+        self.alg0 = alg0
+        self.alg1 = alg1
+
+    def trade(self, exchange_rate):
+        index = np.random.Generator.choice([0, 1], p=[self.l, 1-self.l])
+        self.alg0.trade(exchange_rate)
+        self.alg1.trade(exchange_rate)
+        if index == 0:
+            self.x = self.alg0.x
+        else:
+            self.x = self.alg1.x
+
+
+class OptDeterministic(Algorithm):
+
+    def __init__(self, phi):
+        super().__init__()
+        self.phi = phi
+
+    def trade(self, exchange_rate):
+        if exchange_rate <= self.phi**(1/3):
+            self.x = 1
+        elif exchange_rate >= self.phi**(2/3):
+            self.x = -1
+        else:
+            self.x = 0
+
+
