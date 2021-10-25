@@ -7,13 +7,13 @@ def opt_off(exchange_rates):
     return off.monotonic_ends(exchange_rates)
 
 
-def opt_off_distorted(exchange_rates):
+def opt_off_distorted(exchange_rates, alpha, beta):
     pred_opt_off = opt_off(exchange_rates)
 
     choices = [-1, 0, 1]
-    trans_prob = np.array([[0.7,  0.2, 0.1 ],  # probabilities to change somewhere from -1
-                           [0.15, 0.7, 0.15],  # " " " from 0
-                           [0.1,  0.2, 0.7 ]])  # " " " from 1
+    trans_prob = np.array([[alpha, beta, 1 - alpha - beta],  # probabilities to change somewhere from -1
+                           [(1-alpha)/2, alpha, (1-alpha)/2],  # " " " from 0
+                           [1 - alpha - beta, beta, alpha]])  # " " " from 1
 
     rng = np.random.default_rng()
 
