@@ -110,17 +110,14 @@ def simulate_FtP_unif(phi, length, num_rep=1000, normalized=False, alpha=0.7, be
     return eta, cr
 
 
-def simulate_Alg(phi, length, num_rep=1000, normalized=False):
+def simulate_algo(phi, length, algo, num_rep=1000, normalized=False):
     eta = []
     cr = []
     for i in range(num_rep):
         for sigma in [0, 0.00001, 0.0001, 0.001, 0.01, 0.1, 1, 10, 100]:
             exchange_rates = inst.exchange_rates_normal_from_last(phi, length, sigma)
 
-            p = pred.opt_off_distorted(exchange_rates)
-            alg_pred = alg.FtP(p)
-
-            h = History(alg_pred, exchange_rates)
+            h = History(algo, exchange_rates)
             h.run_full()
             if normalized:
                 eta.append(h.get_normalized_error())
