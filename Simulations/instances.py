@@ -1,6 +1,7 @@
 from numpy.random import default_rng
 import numpy as np
 
+
 def exchange_rates_uniform(phi, length):
     rng = default_rng()
     return rng.uniform(1, phi, length)
