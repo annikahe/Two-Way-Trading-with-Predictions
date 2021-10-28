@@ -13,7 +13,7 @@ class Algorithm:
     Attributes
     ----------
     state : integer in {0, 1}
-        Current stock level.
+        Current state.
     payoff : float
         Payoff accumulated by the algorithm so far.
     x : integer in {-1, 0, 1}
@@ -37,15 +37,20 @@ class Algorithm:
     update_payoff(price)
         Multiplies the current payoff wih the current gain.
     """
-    def __init__(self):
+    def __init__(self, k):
         self.state = 0
         self.payoff = 1
         self.x = 0
+        self.k = k
+        self.count_trade = 0
 
     def run(self, exchange_rate):
-        self.trade(exchange_rate)
-        self.update_payoff(exchange_rate)
-        self.update_state()
+        if self.count_trade < self.k:
+            self.trade(exchange_rate)
+            self.update_payoff(exchange_rate)
+            self.update_state()
+            if self.x == -1:
+                self.k += 1
 
     def trade(self, exchange_rate):
         """
@@ -62,8 +67,8 @@ class Algorithm:
             pass
 
     def update_state(self):
-        if self.x == 1 and self.state == 1: print("Cannot buy. Remain in state 'sell'.")
-        elif self.x == -1 and self.state == 0: print("Cannot sell. Remain in state 'buy'.")
+        # if self.x == 1 and self.state == 1: print("Cannot buy. Remain in state 'sell'.")
+        # elif self.x == -1 and self.state == 0: print("Cannot sell. Remain in state 'buy'.")
         self.state = np.clip(self.state + self.x, 0, 1)
 
 
@@ -86,8 +91,8 @@ class AlgorithmPred(Algorithm):
         The value is removed from the list.
 
     """
-    def __init__(self, predictions):
-        super().__init__()
+    def __init__(self, k, predictions):
+        super().__init__(k)
         self.prediction = 0
         self.remaining_predictions = predictions.copy()
         self.remaining_predictions.reverse()  # reverse the list to be able to pop first element from list
@@ -114,8 +119,8 @@ class AlgorithmRandom(Algorithm):
 
     """
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, k):
+        super().__init__(k)
 
     def trade(self, exchange_rate):
         rng = default_rng()
@@ -143,8 +148,8 @@ class AlgorithmRandomTrade(Algorithm):
                 * if self.state == 1: self.x = -1
     """
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, k):
+        super().__init__(k)
 
     def trade(self, exchange_rate):
         rng = default_rng()
@@ -183,10 +188,11 @@ class FtPTrade(AlgorithmPred):
 
 
 class CombineRandStart(Algorithm):
-    def __init__(self, alg0, alg1, l):
-        super().__init__()
+    def __init__(self, k, alg0, alg1, l):
+        super().__init__(k)
         self.l = l
-        self.index = np.random.Generator.choice([0, 1], p=[l, 1-l])
+        rng = np.random.default_rng()
+        self.index = rng.choice([0, 1], 1, p=[l, 1-l])
         if self.index == 0:
             self.followed_alg = alg0
             self.other_alg = alg1
@@ -201,14 +207,15 @@ class CombineRandStart(Algorithm):
 
 
 class CombineRandStep(Algorithm):
-    def __init__(self, alg0, alg1, l):
-        super().__init__()
+    def __init__(self, k, alg0, alg1, l):
+        super().__init__(k)
         self.l = l
         self.alg0 = alg0
         self.alg1 = alg1
 
     def trade(self, exchange_rate):
-        index = np.random.Generator.choice([0, 1], p=[self.l, 1-self.l])
+        rng = np.random.default_rng()
+        index = rng.choice([0, 1], 1, p=[self.l, 1 - self.l])
         self.alg0.trade(exchange_rate)
         self.alg1.trade(exchange_rate)
         if index == 0:
@@ -219,8 +226,8 @@ class CombineRandStep(Algorithm):
 
 class OptDeterministic(Algorithm):
 
-    def __init__(self, phi):
-        super().__init__()
+    def __init__(self, k, phi):
+        super().__init__(k)
         self.phi = phi
 
     def trade(self, exchange_rate):
