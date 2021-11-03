@@ -37,11 +37,21 @@ class History():
         self.update_xs()
         self.update_states()
 
+    def run_last_step(self, exchange_rate):
+        self.alg.run_last(exchange_rate)
+        self.ftp.run_last(exchange_rate)
+        self.update_payoffs()
+        self.update_xs()
+        self.update_states()
+
     def run_full(self):
-        for e in self.exchange_rates:
+        for e in self.exchange_rates[:-1]:
             self.run_step(e)
             self.opt_off.run(e)
             self.update_errors(self.opt_off)
+        self.run_last_step(self.exchange_rates[-1])
+        self.opt_off.run_last(self.exchange_rates[-1])
+        self.update_errors(self.opt_off)
 
     def get_total_error(self):
         return np.sum(self.errors)
