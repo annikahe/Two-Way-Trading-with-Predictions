@@ -47,16 +47,36 @@ class Algorithm:
     def run(self, exchange_rate):
         if self.count_trade < self.k:
             self.trade(exchange_rate)
+            self.correct_trade()
             self.update_payoff(exchange_rate)
             self.update_state()
-            if self.x == -1:
+            if self.x == -1:  # TODO
                 self.k += 1
+
+    def run_last(self, exchange_rate):
+        self.x = -1
+        self.correct_trade()
+        self.update_payoff(exchange_rate)
+        self.update_state()
 
     def trade(self, exchange_rate):
         """
         Placeholder function for implementations in subclasses.
         """
         pass
+
+    def correct_trade(self):
+        """
+        Correct invalid transactions.
+        If we want to buy but the next possible action is to sell, then we will do nothing.
+        Similarly if we want to sell but the next allowed transaction is to buy, we will also do nothing.
+        """
+        if self.x == 1 and self.state == 1:
+            # print("Cannot buy. Remain in state 'sell'.")
+            self.x = 0
+        elif self.x == -1 and self.state == 0:
+            # print("Cannot sell. Remain in state 'buy'.")
+            self.x = 0
 
     def update_payoff(self, exchange_rate):
         if self.state == 0 and self.x == 1:
@@ -67,8 +87,6 @@ class Algorithm:
             pass
 
     def update_state(self):
-        # if self.x == 1 and self.state == 1: print("Cannot buy. Remain in state 'sell'.")
-        # elif self.x == -1 and self.state == 0: print("Cannot sell. Remain in state 'buy'.")
         self.state = np.clip(self.state + self.x, 0, 1)
 
 
