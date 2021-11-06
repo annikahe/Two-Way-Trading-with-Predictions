@@ -14,24 +14,18 @@ phi = 10
 length = 10  # length of the input sequence
 normalized = False
 num_rep = 1000
+
 alpha = 0.1
 beta = 0.1
 # alpha = [0.7, 0.1, 0.1]
 # beta=[0.2, 0.45, 0.1]
+
 all_combinations = False
 data_model = "DataUniform"
 alg0_name = "ftp"
 alg1_name = "opt"
 lambda_list = [0, 0.25, 0.5, 0.75, 0.99]
 
-# df_start = simulate.simulate_combined_alg_mult(k, phi, length, alg0_name, alg1_name, lambda_list, "start",
-#                                          data_model, num_rep, normalized, alpha, beta, all_combinations)
-#
-# df_step = simulate.simulate_combined_alg_mult(k, phi, length, alg0_name, alg1_name, lambda_list, "step",
-#                                          data_model, num_rep, normalized, alpha, beta, all_combinations)
-#
-# df = df_step.subtract(df_start, fill_value=0)  # TODO: difference of dfs
-# print(df)
 
 eta, cr = simulate.compare_ftpl_types(k, phi, length, alg0_name, alg1_name, lambda_list, data_model, num_rep, alpha, beta, all_combinations)
 
