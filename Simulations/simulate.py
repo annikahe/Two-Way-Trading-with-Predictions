@@ -1,7 +1,7 @@
-import predictions as pred
-from history import History
-import instances as inst
-import algorithms as alg
+import Simulations.predictions as pred
+from Simulations.history import History
+import Simulations.instances as inst
+import Simulations.algorithms as alg
 
 import numpy as np
 import pandas as pd

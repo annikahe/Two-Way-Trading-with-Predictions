@@ -1,4 +1,4 @@
-import algorithms as alg
+import Simulations.algorithms as alg
 
 import numpy as np
 
