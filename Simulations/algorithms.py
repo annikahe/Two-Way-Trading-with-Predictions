@@ -118,8 +118,6 @@ class AlgorithmPred(Algorithm):
     def update_prediction(self):
         self.prediction = self.remaining_predictions.pop()
 
-# TODO: implement second class for algorithms with predictions, where the predictions are of the type "trade" or no "trade"
-
 
 class AlgorithmRandom(Algorithm):
     """

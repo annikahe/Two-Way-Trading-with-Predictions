@@ -1,22 +1,22 @@
-import algorithms as alg
-import offline as off
-import predictions as pred
-import copy
+import Simulations.algorithms as algo
+import Simulations.offline as off
+import Simulations.predictions as pred
 
+import copy
 import numpy as np
 
 
 class History():
-    def __init__(self, algo, predictions, exchange_rates):
-        self.alg = copy.deepcopy(algo)
+    def __init__(self, alg, predictions, exchange_rates):
+        self.alg = copy.deepcopy(alg)
         self.exchange_rates = exchange_rates
         self.states = []
         self.payoffs = []
         self.xs = []
         self.errors = []
-        self.ftp = alg.FtP(self.alg.k, predictions)
+        self.ftp = algo.FtP(self.alg.k, predictions)
         opt_pred = pred.opt_off(self.exchange_rates)
-        self.opt_off = alg.FtP(self.alg.k, opt_pred)
+        self.opt_off = algo.FtP(self.alg.k, opt_pred)
 
     def update_states(self):
         self.states.append(self.alg.state)

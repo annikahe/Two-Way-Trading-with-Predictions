@@ -1,7 +1,7 @@
-import predictions as pred
-from history import History
-import instances as inst
-import algorithms as alg
+import Simulations.predictions as pred
+from Simulations.history import History
+import Simulations.instances as inst
+import Simulations.algorithms as alg
 
 import numpy as np
 import pandas as pd
@@ -175,11 +175,10 @@ def compare_ftpl_types(k, phi, length, alg0_name, alg1_name, lambda_list, data_m
 
 
 def simulate_combined_alg_mult(k, phi, length, alg0_name, alg1_name, lambda_list, comb_type="start",
-                      data_model="DataIterative", num_rep=1000, normalized=False, alpha=0.7, beta=0.2,
-                      all_combinations=False):
+                               data_model="DataIterative", num_rep=1000, normalized=False, alpha=0.7, beta=0.2,
+                               all_combinations=False):
         eta, cr = simulate_combined_alg(k, phi, length, alg0_name, alg1_name, lambda_list, comb_type, data_model,
                                         num_rep, normalized, alpha, beta, all_combinations)
-
 
         column_names = [f"$\lambda = {l}$" for l in lambda_list]
         df = pd.DataFrame(data=np.array(cr).transpose(), index=eta, columns=column_names)
