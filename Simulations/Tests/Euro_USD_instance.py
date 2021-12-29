@@ -13,6 +13,7 @@ if __name__ == '__main__':
 
     exchange_rates = exchange_rates_orig / np.min(exchange_rates_orig)
 
+    ks = [32, 64, 128, 256, np.inf]
     k = np.inf
     phi = 100
     length = 100  # length of the input sequence
@@ -21,7 +22,7 @@ if __name__ == '__main__':
     # alpha = 0.7
     # beta = 0.2
     alpha = [0.7, 0.1, 0.1]
-    beta=[0.2, 0.45, 0.1]
+    beta = [0.2, 0.45, 0.1]
     all_combinations = False
     data_model = "DataIterative"
     alg0_name = "ftp"
@@ -29,13 +30,14 @@ if __name__ == '__main__':
     lambda_list = [0, 0.25, 0.5, 0.75, 1]
     comb_type = "step"
 
-    df = simulate.simulate_combined_alg_mult(k, phi, length, alg0_name, alg1_name, lambda_list, comb_type,
-                                             data_model, num_rep, normalized, alpha, beta, all_combinations)
+    for k in ks:
+        df = simulate.simulate_combined_alg_mult(k, phi, length, alg0_name, alg1_name, lambda_list, comb_type,
+                                                 data_model, num_rep, normalized, alpha, beta, all_combinations)
 
-    print(df)
+        # print(df)
 
-    obj = FtPComparisonObject(df, k, phi, length, alg0_name, alg1_name, lambda_list, comb_type,
-                              data_model, num_rep, normalized, alpha, beta, all_combinations)
+        obj = FtPComparisonObject(df, k, phi, length, alg0_name, alg1_name, lambda_list, comb_type,
+                                  data_model, num_rep, normalized, alpha, beta, all_combinations)
 
-    ph.save_object(obj, f"Instances/Euro_USD-{alg0_name}-{alg1_name}-{comb_type}-k_{k}-{data_model}-alpha_{alpha}-beta_{beta}-length_{length}-repetitions_{num_rep}.pkl")
+        ph.save_object(obj, f"Instances/Euro_USD-{alg0_name}-{alg1_name}-{comb_type}-k_{k}-{data_model}-alpha_{alpha}-beta_{beta}-length_{length}-repetitions_{num_rep}.pkl")
 
