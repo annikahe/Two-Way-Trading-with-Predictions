@@ -1,6 +1,6 @@
-import algorithms as alg
-import offline as off
-import predictions as pred
+import Simulations.algorithms as alg
+import Simulations.offline as off
+import Simulations.predictions as pred
 
 
 def alg_return(algo, exchange_rates):

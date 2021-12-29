@@ -1,8 +1,9 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import Simulations.simulate
-import Simulations.plots
+
+import Simulations.simulate as simulate
+import Simulations.plots as plots
 
 
 def moving_average(a, window_size=3) :

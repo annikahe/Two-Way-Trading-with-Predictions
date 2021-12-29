@@ -1,13 +1,10 @@
-import algorithms as alg
+import Simulations.simulate as simulate
+
 import matplotlib.pyplot as plt
 from matplotlib import cm
-import plots
-import simulate
 import pandas as pd
 import numpy as np
-from decimal import Decimal
 from matplotlib.ticker import MaxNLocator
-
 
 k = np.inf
 phi = 10
